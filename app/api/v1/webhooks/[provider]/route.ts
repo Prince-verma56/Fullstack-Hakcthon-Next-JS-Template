@@ -1,8 +1,9 @@
 import { NextResponse } from 'next/server';
 import { webhookService } from '@/server/integrations/webhooks';
 
-export async function POST(req: Request, { params }: { params: { provider: string } }) {
-  const provider = params.provider;
+export async function POST(req: Request, { params }: { params: Promise<{ provider: string }> }) {
+  const resolvedParams = await params;
+  const provider = resolvedParams.provider;
   
   try {
     const rawBody = await req.text();
