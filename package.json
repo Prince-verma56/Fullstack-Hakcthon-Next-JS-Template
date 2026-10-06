@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
+    "postinstall": "prisma generate",
     "worker": "tsx scripts/worker.ts",
     "test": "vitest run",
     "test:unit": "vitest run tests/unit",
