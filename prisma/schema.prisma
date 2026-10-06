@@ -1,0 +1,27 @@
+// Prisma Schema - Fullstack Hackathon Template
+//
+// This is the foundational schema. Domain-specific models
+// (health, education, commerce) should be added when a specific
+// problem statement requires them.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+/// Core user model. Extended by domain modules as needed.
+model User {
+  id            String    @id @default(cuid())
+  clerkUserId   String    @unique
+  email         String    @unique
+  name          String?
+  avatarUrl     String?
+  role          String    @default("user")
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@map("users")
+}
