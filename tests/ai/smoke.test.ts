@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
+ 
 import { describe, it, expect, vi } from 'vitest';
 import { persistentRag } from '../../ai/rag/persistence';
 import { conversationStore } from '../../ai/conversation/persistence';

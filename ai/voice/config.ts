@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
+ 
 export interface VoiceConfiguration {
   provider: 'vapi' | 'mock';
   assistantId?: string;

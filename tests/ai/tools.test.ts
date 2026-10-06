@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
+ 
 import { expect, test, describe } from 'vitest';
 import { toolRegistry } from '../../ai/tools/registry';
 import { buildAIContext } from '../../ai/context';

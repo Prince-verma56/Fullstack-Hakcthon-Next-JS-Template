@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
+ 
 export type ChannelType = 'text' | 'voice' | 'agent';
 export type MessageRole = 'user' | 'assistant' | 'system' | 'tool';
 

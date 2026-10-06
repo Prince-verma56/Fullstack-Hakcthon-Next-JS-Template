@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { db } from '@/server/db/index';
 import { getRealtimeProvider } from '../realtime';
+import { getPushProvider } from './push';
 import { isFeatureEnabled } from '@/config/features';
 
 export const NotificationSchema = z.object({
@@ -50,9 +51,20 @@ export class DefaultNotificationService implements NotificationService {
       }
     }
 
-    // Future: Handle email / push
+    // 3. Email
     if (payload.channel === 'email' && isFeatureEnabled('email')) {
       // Send email via email provider
+    }
+
+    // 4. Push
+    if (payload.channel === 'push') {
+      const pushProvider = getPushProvider();
+      await pushProvider.send({
+        userId: payload.userId,
+        title: payload.title,
+        body: payload.message,
+        data: payload.metadata as Record<string, string>,
+      });
     }
   }
 

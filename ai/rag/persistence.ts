@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
+ 
+ 
 import { db } from '@/server/db';
 import { RAGDocument, RAGFoundation } from './index';
 import { getAIProvider } from '../core/factory';

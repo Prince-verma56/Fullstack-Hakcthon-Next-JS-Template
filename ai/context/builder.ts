@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
+ 
+ 
 import { AIContext, buildAIContext } from './index';
 import { UserService } from '@/modules/users/service';
 import { conversationStore } from '../conversation/persistence';

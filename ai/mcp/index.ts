@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
+ 
 import { toolRegistry, AITool } from '../tools/registry';
 import { AIContext } from '../context';
 

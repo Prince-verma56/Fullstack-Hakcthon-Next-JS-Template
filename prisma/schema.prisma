@@ -115,6 +115,21 @@ model ScheduledJob {
   @@map("scheduled_jobs")
 }
 
+model DeviceRegistration {
+  id         String   @id @default(cuid())
+  userId     String
+  deviceId   String
+  platform   String   // 'ios', 'android', 'web'
+  token      String
+  metadata   Json?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([userId, deviceId])
+  @@index([userId])
+  @@map("device_registrations")
+}
+
 // --- AI Core Models ---
 
 model Conversation {

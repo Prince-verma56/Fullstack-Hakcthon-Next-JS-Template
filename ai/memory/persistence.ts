@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
+ 
 import { db } from '@/server/db';
 import { AIContext } from '../context';
 import { AIMemoryStore, AIMemoryItem } from './index';

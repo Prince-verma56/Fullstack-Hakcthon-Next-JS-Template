@@ -41,6 +41,7 @@ export const features = {
   location: envBool('FEATURE_LOCATION', false),
   auditLogs: envBool('FEATURE_AUDIT_LOGS', false),
   multimodalAI: envBool('FEATURE_MULTIMODAL_AI', false),
+  push_notifications: envBool('FEATURE_PUSH_NOTIFICATIONS', false),
 } as const;
 
 export type FeatureKey = keyof typeof features;
