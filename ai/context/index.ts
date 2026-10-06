@@ -13,6 +13,9 @@ export interface AIContext {
   memoryRefs?: string[];
   domain?: string;
   metadata?: Record<string, any>;
+  images?: string[];
+  audio?: string[];
+  documents?: string[];
 }
 
 /**
@@ -33,6 +36,9 @@ export function buildAIContext(options: Partial<AIContext> & { channel: 'text' |
     memoryRefs: options.memoryRefs || [],
     domain: options.domain || 'general',
     metadata: options.metadata || {},
+    images: options.images || [],
+    audio: options.audio || [],
+    documents: options.documents || [],
   };
 }
 

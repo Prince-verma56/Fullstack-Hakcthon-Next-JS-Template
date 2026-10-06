@@ -27,6 +27,20 @@ export const features = {
   mcp: envBool('FEATURE_MCP', false),
   analytics: envBool('FEATURE_ANALYTICS', false),
   demoMode: envBool('FEATURE_DEMO_MODE', true),
+  
+  // Phase 7 - Universal Capabilities
+  realtime: envBool('FEATURE_REALTIME', false),
+  jobs: envBool('FEATURE_JOBS', false),
+  scheduler: envBool('FEATURE_SCHEDULER', false),
+  notifications: envBool('FEATURE_NOTIFICATIONS', false),
+  search: envBool('FEATURE_SEARCH', false),
+  integrations: envBool('FEATURE_INTEGRATIONS', false),
+  webhooks: envBool('FEATURE_WEBHOOKS', false),
+  fileProcessing: envBool('FEATURE_FILE_PROCESSING', false),
+  importExport: envBool('FEATURE_IMPORT_EXPORT', false),
+  location: envBool('FEATURE_LOCATION', false),
+  auditLogs: envBool('FEATURE_AUDIT_LOGS', false),
+  multimodalAI: envBool('FEATURE_MULTIMODAL_AI', false),
 } as const;
 
 export type FeatureKey = keyof typeof features;

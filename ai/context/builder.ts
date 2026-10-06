@@ -13,6 +13,9 @@ export interface ContextBuilderOptions {
   includeKnowledge?: boolean;
   includeHistory?: boolean;
   knowledgeQuery?: string;
+  images?: string[];
+  audio?: string[];
+  documents?: string[];
   overrides?: Partial<AIContext>;
 }
 
@@ -27,6 +30,9 @@ export class AIContextBuilder {
       role: user?.role || 'guest',
       permissions: user?.role === 'admin' ? ['admin', 'user'] : ['user'],
       conversationId: options.conversationId,
+      images: options.images,
+      audio: options.audio,
+      documents: options.documents,
       ...options.overrides,
     });
 

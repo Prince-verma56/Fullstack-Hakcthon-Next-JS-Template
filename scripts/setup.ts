@@ -1,63 +1,45 @@
-/**
- * Setup Script
- *
- * Validates runtime, prepares environment, and reports readiness.
- *
- * Usage: npm run setup
- */
-
 import { execSync } from 'child_process';
-import { existsSync, copyFileSync } from 'fs';
-import { resolve } from 'path';
+import fs from 'fs';
 
-const ROOT = resolve(import.meta.dirname, '..');
-
-function run(cmd: string, label: string): boolean {
+function run(command: string, name: string) {
+  console.log(`\n⏳ Running: ${name}...`);
   try {
-    execSync(cmd, { cwd: ROOT, stdio: 'pipe' });
-    console.log(`  ✅ ${label}`);
-    return true;
+    execSync(command, { stdio: 'inherit' });
+    console.log(`✅ ${name} completed.`);
+  } catch (err) {
+    console.error(`❌ ${name} failed.`);
+    process.exit(1);
+  }
+}
+
+async function setup() {
+  console.log('\n🚀 Starting Fullstack Hackathon Template Setup...\n');
+
+  // Verify node/npm
+  run('npm run doctor', 'Doctor Checks');
+
+  // Start infrastructure
+  console.log('\n[Note] Setup assumes Docker is running on your machine.');
+  try {
+    execSync('docker info', { stdio: 'ignore' });
+    run('npm run infra:up', 'Starting Infrastructure (Docker)');
   } catch {
-    console.log(`  ❌ ${label}`);
-    return false;
-  }
-}
-
-async function main() {
-  console.log('\n🚀 Fullstack Hackathon Template - Setup\n');
-
-  // 1. Check Node
-  console.log('1. Runtime check');
-  run('node --version', 'Node.js');
-  run('npm --version', 'npm');
-
-  // 2. Environment file
-  console.log('\n2. Environment');
-  const envPath = resolve(ROOT, '.env');
-  const envExamplePath = resolve(ROOT, '.env.example');
-  if (!existsSync(envPath) && existsSync(envExamplePath)) {
-    copyFileSync(envExamplePath, envPath);
-    console.log('  ✅ Created .env from .env.example');
-  } else if (existsSync(envPath)) {
-    console.log('  ✅ .env already exists');
-  } else {
-    console.log('  ⚠️  No .env.example found');
+    console.log('⚠️ Docker is not running. Skipping infrastructure start.');
   }
 
-  // 3. Dependencies
-  console.log('\n3. Dependencies');
-  run('npm install', 'npm install');
+  // Prisma Generation
+  run('npm run generate', 'Prisma Generate');
+  
+  // Prisma Migration (Skip if docker not running because we need DB)
+  try {
+    execSync('docker info', { stdio: 'ignore' });
+    run('npm run db:push', 'Database Schema Push (Skipping migrations for initial dev setup speed)');
+    run('npm run db:seed', 'Seeding Database');
+  } catch {
+    console.log('⚠️ Skipping DB migrations since Docker is not running.');
+  }
 
-  // 4. Prisma generate
-  console.log('\n4. Prisma');
-  run('npx prisma generate', 'Prisma client generated');
-
-  console.log('\n✨ Setup complete!');
-  console.log('\nNext steps:');
-  console.log('  1. Start infrastructure: npm run infra:up');
-  console.log('  2. Run migrations:       npm run db:migrate');
-  console.log('  3. Seed database:        npm run db:seed');
-  console.log('  4. Start dev server:     npm run dev\n');
+  console.log('\n🎉 Setup Complete! Run `npm run dev` to start the application.');
 }
 
-main().catch(console.error);
+setup();

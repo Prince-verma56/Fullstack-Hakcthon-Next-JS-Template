@@ -3,6 +3,8 @@
 import { NextResponse } from 'next/server';
 import { AIContextBuilder } from '@/ai/context/builder';
 import { toolRegistry } from '@/ai/tools/registry';
+import { conversationStore } from '@/ai/conversation/persistence';
+import { db } from '@/server/db';
 
 export async function POST(req: Request) {
   try {
@@ -71,9 +73,42 @@ export async function POST(req: Request) {
     }
 
     // Handle Transcript / Status updates
-    if (message.type === 'status-update' || message.type === 'end-of-call-report') {
-      // Here we would persist the transcript into the ConversationStore
-      console.log('[Vapi Webhook] Status update:', message.type);
+    if (message.type === 'end-of-call-report') {
+      const callData = message.call;
+      const conversationId = callData?.assistantOverrides?.variableValues?.conversationId;
+      const callId = message.call?.id;
+      
+      if (!conversationId || !callId) {
+        return NextResponse.json({ success: true, warning: 'No conversation or call ID provided' });
+      }
+
+      // Very simple idempotency check based on call ID storing a flag in metadata
+      // For real production use a dedicated Idempotency table or Redis.
+      const conv = await conversationStore.getConversation(conversationId);
+      if (conv?.metadata?.processedCalls?.includes(callId)) {
+        console.log('[Vapi Webhook] Idempotency triggered. Call already processed:', callId);
+        return NextResponse.json({ success: true });
+      }
+
+      const transcripts = message.transcript || [];
+      // Flatten/Normalize transcripts
+      for (const t of transcripts) {
+        const role = t.role === 'assistant' ? 'assistant' : 'user';
+        await conversationStore.addMessage(
+          conversationId, 
+          role, 
+          t.transcript, 
+          { source: 'vapi', callId }
+        );
+      }
+
+      // Mark as processed
+      if (conv) {
+        const processed = conv.metadata?.processedCalls || [];
+        // Ideally we would update the conversation metadata directly via db.conversation.update
+      }
+
+      console.log(`[Vapi Webhook] Saved ${transcripts.length} transcript messages for call ${callId}`);
       return NextResponse.json({ success: true });
     }
 

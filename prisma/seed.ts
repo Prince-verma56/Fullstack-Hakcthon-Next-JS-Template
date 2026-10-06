@@ -1,51 +1,71 @@
-/**
- * Prisma Seed Script
- *
- * Populates the database with demo data for development and presentations.
- *
- * Usage:
- *   npx prisma db seed
- *   npm run db:seed
- */
-
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log('🌱 Seeding database...');
-
-  // Demo user
-  const demoUser = await prisma.user.upsert({
-    where: { email: 'demo@hackathon.dev' },
+  console.log('🌱 Starting database seed...');
+  
+  // Seed demo user
+  const user = await prisma.user.upsert({
+    where: { id: 'demo-user' },
     update: {},
     create: {
-      clerkUserId: 'seed_demo_user',
-      email: 'demo@hackathon.dev',
+      id: 'demo-user',
+      clerkUserId: 'demo-clerk-123',
       name: 'Demo User',
+      email: 'demo@example.com',
       role: 'user',
     },
   });
 
-  // Admin user
-  const adminUser = await prisma.user.upsert({
-    where: { email: 'admin@hackathon.dev' },
+  // Seed demo conversation
+  const conv = await prisma.conversation.upsert({
+    where: { id: 'demo-conv' },
     update: {},
     create: {
-      clerkUserId: 'seed_admin_user',
-      email: 'admin@hackathon.dev',
-      name: 'Admin User',
-      role: 'admin',
+      id: 'demo-conv',
+      userId: user.id,
+      channel: 'text',
+      metadata: { title: 'Demo Conversation', status: 'active' },
     },
   });
 
-  console.log('✅ Seeded users:', { demoUser: demoUser.email, adminUser: adminUser.email });
-  console.log('🌱 Seeding complete.');
+  // Seed demo message
+  await prisma.message.upsert({
+    where: { id: 'demo-msg-1' },
+    update: {},
+    create: {
+      id: 'demo-msg-1',
+      conversationId: conv.id,
+      role: 'assistant',
+      content: 'Hello! I am the demo AI assistant. How can I help you today?',
+    },
+  });
+
+  // Example RAG document (abstract)
+  await prisma.document.upsert({
+    where: { id: 'demo-doc-1' },
+    update: {},
+    create: {
+      id: 'demo-doc-1',
+      userId: user.id,
+      filename: 'Platform Overview.txt',
+      mimeType: 'text/plain',
+      metadata: { 
+        source: 'demo',
+        content: 'This platform provides a generic AI foundation with text, voice, tools, RAG, and multi-agent orchestration capabilities.'
+      },
+    },
+  });
+
+  console.log('✅ Database seed complete!');
 }
 
 main()
   .catch((e) => {
-    console.error('❌ Seed failed:', e);
+    console.error(e);
     process.exit(1);
   })
-  .finally(() => prisma.$disconnect());
+  .finally(async () => {
+    await prisma.$disconnect();
+  });
