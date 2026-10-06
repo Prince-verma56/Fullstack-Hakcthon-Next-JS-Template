@@ -1,14 +1,11 @@
 /**
  * AI Core - barrel export
- *
- * Re-exports the AI provider interface and related types.
  */
 export type {
-  AiProvider,
-  GenerateInput,
-  GenerateResult,
-  StreamInput,
-  StructuredInput,
-  EmbedInput,
+  AIProvider,
+  GenerateOptions,
+  StreamOptions,
+  StructuredOptions,
+  EmbedOptions,
   EmbedResult,
 } from './interface';

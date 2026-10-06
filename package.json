@@ -32,12 +32,17 @@
     "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
+    "@ai-sdk/openai": "^4.0.84",
     "@base-ui/react": "^1.8.0",
     "@clerk/nextjs": "^7.9.11",
     "@hookform/resolvers": "^5.9.1",
+    "@langchain/core": "^1.2.16",
+    "@langchain/langgraph": "^1.4.19",
     "@prisma/adapter-pg": "^7.10.0",
     "@studio-freight/lenis": "^1.0.42",
     "@types/pg": "^8.23.1",
+    "@vapi-ai/web": "^2.7.1",
+    "ai": "^7.0.128",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",

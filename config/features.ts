@@ -21,6 +21,7 @@ export const features = {
   payments: envBool('FEATURE_PAYMENTS', false),
   redis: envBool('FEATURE_REDIS', false),
   ai: envBool('FEATURE_AI', false),
+  voice: envBool('FEATURE_VOICE', false),
   rag: envBool('FEATURE_RAG', false),
   agents: envBool('FEATURE_AGENTS', false),
   mcp: envBool('FEATURE_MCP', false),
